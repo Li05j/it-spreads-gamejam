@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7vhyo0malpeg"]
+[gd_scene load_steps=6 format=3 uid="uid://c7vhyo0malpeg"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_ljk6n"]
 [ext_resource type="ButtonGroup" uid="uid://cgrokv7q16c1n" path="res://button-groups/buildButtons.tres" id="2_ojkpf"]
+[ext_resource type="Script" path="res://scenes/main/enemyManager.gd" id="3_mkfr4"]
+[ext_resource type="Script" path="res://scenes/main/camera.gd" id="3_ms6e4"]
 
 [sub_resource type="TileSet" id="TileSet_2ygf7"]
 tile_size = Vector2i(64, 64)
@@ -26,35 +28,43 @@ tile_set = SubResource("TileSet_2ygf7")
 rendering_quadrant_size = 128
 format = 2
 
-[node name="controlPanel" type="Panel" parent="."]
-layout_mode = 0
+[node name="enemyManager" type="Node" parent="."]
+script = ExtResource("3_mkfr4")
+
+[node name="camera" type="Camera2D" parent="."]
+position = Vector2(574, 318)
+script = ExtResource("3_ms6e4")
+
+[node name="canvas" type="CanvasLayer" parent="."]
+
+[node name="controlPanel" type="Panel" parent="canvas"]
 offset_left = 906.0
 offset_top = 16.0
 offset_right = 1137.0
 offset_bottom = 634.0
 
-[node name="VBox" type="VBoxContainer" parent="controlPanel"]
+[node name="VBox" type="VBoxContainer" parent="canvas/controlPanel"]
 layout_mode = 0
 offset_left = 13.0
 offset_top = 16.0
 offset_right = 122.0
 offset_bottom = 109.0
 
-[node name="goldDisplay" type="Label" parent="controlPanel/VBox"]
+[node name="goldDisplay" type="Label" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 text = "Gold:"
 
-[node name="buildBeaconButton" type="Button" parent="controlPanel/VBox"]
+[node name="buildBeaconButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Beacon"
 
-[node name="buildTurretButton" type="Button" parent="controlPanel/VBox"]
+[node name="buildTurretButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Turret"
 
-[connection signal="pressed" from="controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
-[connection signal="pressed" from="controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
+[connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
+[connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
