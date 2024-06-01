@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7vhyo0malpeg"]
+[gd_scene load_steps=3 format=3 uid="uid://c7vhyo0malpeg"]
+
+[ext_resource type="Script" path="res://TileMap.gd" id="1_5c8ee"]
 
 [sub_resource type="TileSet" id="TileSet_2ygf7"]
 tile_size = Vector2i(128, 128)
@@ -9,3 +11,4 @@ tile_size = Vector2i(128, 128)
 tile_set = SubResource("TileSet_2ygf7")
 rendering_quadrant_size = 128
 format = 2
+script = ExtResource("1_5c8ee")
