@@ -10,6 +10,9 @@ var TurretScene = preload("res://scenes/turret/turret.tscn")
 var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
 
+var map: Dictionary = {}
+var enemyManager: Array = []
+
 func _ready():
 	set_process_input(true)
 	$controlPanel/VBox/goldDisplay.text = str(gold)
@@ -17,18 +20,23 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
 		print("Mouse button pressed at position: ", event.position)
+		var tilemap_position = get_tilemap_position(event.position)
 		if active_button == $controlPanel/VBox/buildTurretButton:
-			spawn_turret(event.position)
+			spawn_turret(tilemap_position)
 		elif active_button == $controlPanel/VBox/buildBeaconButton:
-			spawn_beacon(event.position)
+			spawn_beacon(tilemap_position)
 
 func spawn_turret(click_position):
 	if !check_afforadble("turret"):
 		return # Player cannot afford turret
-		
+	
+	if check_occupied(click_position):
+		return # player cannot place turret on occupied tile
+	
 	var turret_instance = TurretScene.instantiate() # Create an instance of the turret
 	if turret_instance:
 		add_child(turret_instance)  # Add it to the Main scene tree
+		map[click_position] = true
 		turret_instance.position = click_position
 		gold -= TURRET_PRICE
 		$controlPanel/VBox/goldDisplay.text = str(gold) # Update gold display
@@ -81,7 +89,11 @@ func set_active_button(button):
 	active_button = button
 	active_button.modulate = Color(0.5, 0.5, 0.5)
 	
+func get_tilemap_position(pos):
+	return $tilemap.map_to_local($tilemap.local_to_map(pos))
 	
+func check_occupied(pos):
+	return pos in map and map[pos] != null
 #
 ## Called when the node enters the scene tree for the first time.
 #func _ready():
