@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c1n0lulv753ju" path="res://icon.svg" id="1_mthhc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oytm7"]
-size = Vector2(128, 128)
+size = Vector2(64, 64)
 
 [node name="Turret" type="Node2D"]
 

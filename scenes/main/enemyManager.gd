@@ -1,12 +1,18 @@
 class_name EnemyManager extends Node
 
-var enemyTiles = [] # tiles occupied by enemies
+const ENEMY_MAX_VALUE = 100 # maximum presence of enemy in a tile
+
+var enemyTiles = {} # tiles occupied by enemies
 var enemySources = [] # tiles that can spread
 
 var map = null
+var tilemap = null
+var container = null
 
-func use_tilemap(tilemap):
-	map = tilemap
+func _init(map, tilemap, container):
+	self.map = map
+	self.tilemap = tilemap
+	self.container = container
 
 func run_iteration(delta):
 	for source in enemySources:
@@ -22,8 +28,17 @@ func spread(source):
 		Vector2(0, 1)
 	]
 	for direction in adjacent_list:
-		var tile = map.tile_size * direction + source
-		if is_spreadable(tile): enemyTiles[tile] += 10
+		var tile = map.tile_size * direction + source # TODO: hmm
+		if is_spreadable(tile): 
+			enemyTiles[tile] = max(ENEMY_MAX_VALUE, enemyTiles[tile] + 10)
+		if enemyTiles[tile] == 100:
+			enemySources.append(tile)
+		# TODO: we need to draw new enemies after this update
+		
 
 func is_spreadable(tile):
-	pass
+	# TODO: implement spreadable check
+	if tile in map:
+		return map[tile].type == "enemy"
+	else:
+		return true

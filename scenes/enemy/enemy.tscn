@@ -1,16 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://t6vnsmbnvddp"]
 
-[sub_resource type="Curve" id="Curve_s5g2o"]
-_data = [Vector2(0.417582, 0.505494), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_kcaet"]
+_data = [Vector2(0.532967, 0.637363), 0.0, 0.0, 0, 0]
 point_count = 1
 
-[sub_resource type="CurveTexture" id="CurveTexture_ogdw3"]
+[sub_resource type="CurveTexture" id="CurveTexture_82ip5"]
 width = 64
 texture_mode = 1
-curve = SubResource("Curve_s5g2o")
+curve = SubResource("Curve_kcaet")
 
 [node name="Enemy" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(1, 250)
-texture = SubResource("CurveTexture_ogdw3")
+texture = SubResource("CurveTexture_82ip5")

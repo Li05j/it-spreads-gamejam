@@ -24,5 +24,5 @@ func _input(event):
 			drag_start_pos = mouse_pos
 
 func _process(delta):
-	global_position = target_pos
+	global_position = target_pos # TODO: fix scuffed camera movements
 

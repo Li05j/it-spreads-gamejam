@@ -13,17 +13,24 @@ var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
 
 var map: Dictionary = {}
-var enemy_manager = EnemyManager.new()
+var enemy_manager: EnemyManager
+
+@onready var enemy_container = $EnemyContainer
+@onready var tilemap = $tilemap
 
 func _ready():
 	set_process_input(true)
 	$canvas/controlPanel/VBox/goldDisplay.text = str(gold)
-	enemy_manager.use_tilemap($tilemap)
+	enemy_manager = EnemyManager.new(map, tilemap, enemy_container)
+	
+func _process(delta):
+	enemy_manager.run_iteration(delta)
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
-		print("Mouse button pressed at position: ", event.position)
-		var tilemap_position = get_tilemap_position(event.position)
+		# NOTE: use get_global_mouse_position instead of event.global_position
+		print("Mouse button pressed at position: ", event.global_position)
+		var tilemap_position = get_tilemap_position(get_global_mouse_position())
 		if active_button == $canvas/controlPanel/VBox/buildTurretButton:
 			spawn_turret(tilemap_position)
 		elif active_button == $canvas/controlPanel/VBox/buildBeaconButton:
