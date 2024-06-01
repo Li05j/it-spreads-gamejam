@@ -7,14 +7,18 @@ const BEACON_PRICE = 10
 # Preload the turret scene
 var TurretScene = preload("res://scenes/turret/turret.tscn")
 
+const EnemyManager = preload("res://scenes/main/enemyManager.gd")
+
 var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
 
 var map: Dictionary = {}
+var enemy_manager = EnemyManager.new()
 
 func _ready():
 	set_process_input(true)
 	$canvas/controlPanel/VBox/goldDisplay.text = str(gold)
+	enemy_manager.use_tilemap($tilemap)
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:

@@ -24,6 +24,5 @@ func _input(event):
 			drag_start_pos = mouse_pos
 
 func _process(delta):
-	if drag_enabled:
-		global_position = target_pos
+	global_position = target_pos
 

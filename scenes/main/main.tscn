@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c7vhyo0malpeg"]
+[gd_scene load_steps=5 format=3 uid="uid://c7vhyo0malpeg"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_ljk6n"]
 [ext_resource type="ButtonGroup" uid="uid://cgrokv7q16c1n" path="res://button-groups/buildButtons.tres" id="2_ojkpf"]
-[ext_resource type="Script" path="res://scenes/main/enemyManager.gd" id="3_mkfr4"]
 [ext_resource type="Script" path="res://scenes/main/camera.gd" id="3_ms6e4"]
 
 [sub_resource type="TileSet" id="TileSet_2ygf7"]
@@ -28,11 +27,8 @@ tile_set = SubResource("TileSet_2ygf7")
 rendering_quadrant_size = 128
 format = 2
 
-[node name="enemyManager" type="Node" parent="."]
-script = ExtResource("3_mkfr4")
-
 [node name="camera" type="Camera2D" parent="."]
-position = Vector2(574, 318)
+position = Vector2(577, 324)
 script = ExtResource("3_ms6e4")
 
 [node name="canvas" type="CanvasLayer" parent="."]
