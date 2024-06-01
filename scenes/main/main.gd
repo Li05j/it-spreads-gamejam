@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 # Preload the turret scene
 var TurretScene = preload("res://scenes/turret/turret.tscn")
@@ -12,10 +12,15 @@ func _input(event):
 		spawn_turret(event.position)
 
 func spawn_turret(click_position):
-	print("Spawning turret at position: ", click_position)
 	var turret_instance = TurretScene.instantiate() # Create an instance of the turret
-	add_child(turret_instance)  # Add it to the scene tree
-	turret_instance.position = click_position
+	#add_child(turret_instance)  # Add it to the Main scene tree
+	#turret_instance.position = click_position
+	if turret_instance:
+		add_child(turret_instance)  # Add it to the Main scene tree
+		turret_instance.position = click_position
+		print("Spawning turret at position: ", click_position)
+	else:
+		print("Failed to create turret instance.")
 
 #
 ## Called when the node enters the scene tree for the first time.
