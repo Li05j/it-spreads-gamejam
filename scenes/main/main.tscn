@@ -1,16 +1,60 @@
-[gd_scene load_steps=3 format=3 uid="uid://c7vhyo0malpeg"]
+[gd_scene load_steps=4 format=3 uid="uid://c7vhyo0malpeg"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_ljk6n"]
+[ext_resource type="ButtonGroup" uid="uid://cgrokv7q16c1n" path="res://button-groups/buildButtons.tres" id="2_ojkpf"]
 
 [sub_resource type="TileSet" id="TileSet_2ygf7"]
 tile_size = Vector2i(128, 128)
 
 [node name="Main" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1152.0
+offset_top = -324.0
+offset_right = -1152.0
+offset_bottom = -324.0
+grow_horizontal = 0
+grow_vertical = 2
 script = ExtResource("1_ljk6n")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_2ygf7")
 rendering_quadrant_size = 128
 format = 2
+
+[node name="controlPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 906.0
+offset_top = 16.0
+offset_right = 1137.0
+offset_bottom = 634.0
+
+[node name="VBox" type="VBoxContainer" parent="controlPanel"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 16.0
+offset_right = 122.0
+offset_bottom = 109.0
+
+[node name="goldDisplay" type="Label" parent="controlPanel/VBox"]
+layout_mode = 2
+text = "Gold:"
+
+[node name="buildBeaconButton" type="Button" parent="controlPanel/VBox"]
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("2_ojkpf")
+text = "Build Beacon"
+
+[node name="buildTurretButton" type="Button" parent="controlPanel/VBox"]
+layout_mode = 2
+toggle_mode = true
+button_group = ExtResource("2_ojkpf")
+text = "Build Turret"
+
+[connection signal="pressed" from="controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
+[connection signal="pressed" from="controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
