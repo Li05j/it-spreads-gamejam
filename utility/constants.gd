@@ -5,12 +5,12 @@ const GOLD_UPDATE_INTERVAL = 1.0
 const MAP_WIDTH = 24
 const MAP_HEIGHT = 24
 
-const INITIAL_GOLD = 50
+const INITIAL_GOLD = 40
 const GOLD_PER_INTERVAL = 1
 
 # Purchasables
 const TURRET_PRICE = 25
-const BEACON_PRICE = 25
+const BEACON_PRICE = 10
 const TURRET_PLACEMENT_RADIUS = 1 # turret placement radius increase
 const BEACON_PLACEMENT_RADIUS = 3 # beacon placement radius increase
 
@@ -31,5 +31,5 @@ const TICKS_TILL_SHOOT = 1
 # Economy
 const INITIAL_GOLD_GEN = 1
 const GOLD_GEN_INCREASE = 1
-const INITIAL_ECONOMY_UPGRADE_PRICE = 10
-const UPGRADE_PRICE_INCREASE_RATE = 1.5
+const INITIAL_ECONOMY_UPGRADE_PRICE = 15
+const UPGRADE_PRICE_INCREASE_RATE = 1.1

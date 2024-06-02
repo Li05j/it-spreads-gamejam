@@ -62,7 +62,7 @@ layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Beacon
-Cost: $25"
+Cost: $15"
 
 [node name="buildTurretButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
