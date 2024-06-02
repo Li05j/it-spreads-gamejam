@@ -26,7 +26,7 @@ func in_range_2d(x: int, y: int):
 	return 0 <= x and x < self.width and 0 <= y and y < self.height
 
 # update all cells with Manhattan distance <= r to (x,y)
-func update_range(p: Vector2i, r: int):
+func update_range(p: Vector2i, r: int, remove: bool = false):
 	var x = p.x
 	var y = p.y
 	for dx in range(-r, r+1):
@@ -35,16 +35,27 @@ func update_range(p: Vector2i, r: int):
 			var cur_x = x + dx
 			var cur_y = y + dy
 			if in_range_2d(cur_x, cur_y):
-				self.map[cur_x][cur_y] = 1
-				add_placement_tile(Vector2i(cur_x, cur_y))
+				if remove:
+					remove_placement_tile(Vector2i(cur_x, cur_y))
+					self.map[cur_x][cur_y] -= 1
+				else:
+					add_placement_tile(Vector2i(cur_x, cur_y))
+					self.map[cur_x][cur_y] += 1
 
 func check_placement_range(p: Vector2i):
-	return in_range_2d(p.x, p.y) and self.map[p.x][p.y] == 1
+	return in_range_2d(p.x, p.y) and self.map[p.x][p.y] > 0
 	
 func add_placement_tile(p: Vector2i):
 	var tile_instance = PlacementTile.instantiate()
 	tile_instance.global_position = tilemap.map_to_local(p)
 	tilemap.add_child(tile_instance)
+	
+func remove_placement_tile(p: Vector2i):
+	# Find the tile instance at position p and remove it
+	for child in tilemap.get_children():
+		if child.global_position == tilemap.map_to_local(p):
+			child.free()
+			break
 	
 
 # # Called when the node enters the scene tree for the first time.

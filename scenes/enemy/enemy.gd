@@ -40,14 +40,16 @@ func spread():
 		
 		if check_occupied(world_pos) == true:
 			var obj = object_map[world_pos]
-			if obj != null:
-				if obj is Enemy:
-					continue
-				if obj is Turret or obj is Beacon:	
-					print("Destroying ", obj)
-					obj.queue_free()
-					object_map.erase(adj_pos)
-					print("Destroyed at position: ", adj_pos)
+			if obj is Enemy:
+				continue # We do not create another enemy on top of an existing one.
+			if obj is Turret:
+				placement_map.update_range(adj_pos, C.TURRET_PLACEMENT_RADIUS, true)
+			elif obj is Beacon:
+				placement_map.update_range(adj_pos, C.BEACON_PLACEMENT_RADIUS, true)
+					
+			obj.queue_free()
+			object_map.erase(adj_pos)
+			print("Turret/Beacon destroyed at position: ", adj_pos)
 		
 		var new_enemy = preload("res://scenes/enemy/enemy.tscn").instantiate()
 		new_enemy.enemy_init(world_pos, object_map, placement_map)
