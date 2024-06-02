@@ -35,7 +35,6 @@ func update_range(p: Vector2i, r: int):
 			var cur_x = x + dx
 			var cur_y = y + dy
 			if in_range_2d(cur_x, cur_y):
-				print_debug("added:", str(cur_x), str(cur_y))
 				self.map[cur_x][cur_y] = 1
 				add_placement_tile(Vector2i(cur_x, cur_y))
 
@@ -44,8 +43,8 @@ func check_placement_range(p: Vector2i):
 	
 func add_placement_tile(p: Vector2i):
 	var tile_instance = PlacementTile.instantiate()
-	add_child(tile_instance)
 	tile_instance.global_position = tilemap.map_to_local(p)
+	tilemap.add_child(tile_instance)
 	
 
 # # Called when the node enters the scene tree for the first time.
