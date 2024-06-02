@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhmgbwux6xwxe"]
+[gd_scene load_steps=4 format=3 uid="uid://bhmgbwux6xwxe"]
 
 [ext_resource type="Texture2D" uid="uid://4bjpgvgukgei" path="res://sprites/icon.svg" id="1_6pfpe"]
+[ext_resource type="Script" path="res://scenes/turret/turret.gd" id="1_d2fvu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oytm7"]
 size = Vector2(64, 64)
 
 [node name="Turret" type="Node2D"]
+script = ExtResource("1_d2fvu")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
