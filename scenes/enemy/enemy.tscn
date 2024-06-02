@@ -1,16 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://t6vnsmbnvddp"]
 
-[sub_resource type="Curve" id="Curve_kcaet"]
-_data = [Vector2(0.532967, 0.637363), 0.0, 0.0, 0, 0]
-point_count = 1
-
-[sub_resource type="CurveTexture" id="CurveTexture_82ip5"]
-width = 64
-texture_mode = 1
-curve = SubResource("Curve_kcaet")
+[ext_resource type="Script" path="res://scenes/enemy/enemy.gd" id="1_sjixb"]
+[ext_resource type="Texture2D" uid="uid://bgtp5h5pfqkry" path="res://sprites/black-square.svg" id="2_mo4d0"]
 
 [node name="Enemy" type="Node2D"]
+script = ExtResource("1_sjixb")
+
+[node name="Timer" type="Timer" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(1, 250)
-texture = SubResource("CurveTexture_82ip5")
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("2_mo4d0")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

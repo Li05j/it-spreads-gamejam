@@ -7,37 +7,35 @@ const BEACON_PRICE = 10
 # Preload the turret scene
 var TurretScene = preload("res://scenes/turret/turret.tscn")
 
-const EnemyManager = preload("res://scenes/main/enemyManager.gd")
-
 var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
 
 var map: Dictionary = {}
-var enemy_manager: EnemyManager
 
-@onready var enemy_container = $EnemyContainer
+@onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
 
 func _ready():
 	set_process_input(true)
-	$canvas/controlPanel/VBox/goldDisplay.text = str(gold)
-	enemy_manager = EnemyManager.new(map, tilemap, enemy_container)
+	control_panel_vbox.get_node("goldDisplay").text = str(gold)
+	spawn_initial_enemy()
 	
-func _process(delta):
-	enemy_manager.run_iteration(delta)
+#func _process(delta):
+	#pass
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
 		# NOTE: use get_global_mouse_position instead of event.global_position
-		print("Mouse button pressed at position: ", event.global_position)
-		var tilemap_position = get_tilemap_position(get_global_mouse_position())
-		if active_button == $canvas/controlPanel/VBox/buildTurretButton:
+		var global_mouse_pos = get_global_mouse_position()
+		print("Mouse button pressed at position: ", global_mouse_pos)
+		var tilemap_position = get_tilemap_position(global_mouse_pos)
+		if active_button == control_panel_vbox.get_node("buildTurretButton"):
 			spawn_turret(tilemap_position)
-		elif active_button == $canvas/controlPanel/VBox/buildBeaconButton:
+		elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
 			spawn_beacon(tilemap_position)
 
 func spawn_turret(click_position):
-	if !check_afforadble("turret"):
+	if !check_affordable("turret"):
 		return # Player cannot afford turret
 	
 	if check_occupied(click_position):
@@ -49,7 +47,7 @@ func spawn_turret(click_position):
 		map[click_position] = true
 		turret_instance.position = click_position
 		gold -= TURRET_PRICE
-		$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # Update gold display
+		control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
 		print("Spawned turret at position: ", click_position)
 	else:
 		print("Failed to create turret instance.")
@@ -57,7 +55,7 @@ func spawn_turret(click_position):
 func spawn_beacon(click_position):
 	print("TODO: beacon not yet impelemented.")
 	
-func check_afforadble(item):
+func check_affordable(item):
 	match item:
 		"turret":
 			if gold >= TURRET_PRICE:
@@ -67,24 +65,22 @@ func check_afforadble(item):
 				return true;
 	return false
 	
-
+func spawn_initial_enemy():
+	if tilemap == null:
+		print("TileMap is null")
+	else:
+		print("TileMap found")
+	var center_tile = Vector2(5, 5)
+	var world_pos = tilemap.map_to_local(center_tile)
+	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
+	enemy_instance.global_position = world_pos
+	add_child(enemy_instance)
+	
 func _on_build_turret_button_pressed():
-	set_active_button($canvas/controlPanel/VBox/buildTurretButton)
-	#if active_button == $controlPanel/buildTurretButton:
-		#active_button = null
-		#print("Building nothing.")
-	#else:
-		#active_button = $controlPanel/buildTurretButton
-		#print("Building turret.")
+	set_active_button(control_panel_vbox.get_node("buildTurretButton"))
 
 func _on_build_beacon_button_pressed():
-	set_active_button($canvas/controlPanel/VBox/buildBeaconButton)
-	#if active_button == $controlPanel/VBox/buildBeaconButton:
-		#active_button = null
-		#print("Building nothing.")
-	#else:
-		#active_button = $controlPanel/VBox/buildBeaconButton.press
-		#print("Building beacon.")
+	set_active_button(control_panel_vbox.get_node("buildBeaconButton"))
 		
 func set_active_button(button):
 	if active_button == button:
@@ -92,12 +88,11 @@ func set_active_button(button):
 		active_button.release_focus()
 		active_button = null
 		print("Building Nothing.")
-		return
-	
-	if active_button != null:
-		active_button.modulate = Color(1, 1, 1)
-	active_button = button
-	active_button.modulate = Color(0.5, 0.5, 0.5)
+	else:
+		if active_button != null:
+			active_button.modulate = Color(1, 1, 1)
+		active_button = button
+		active_button.modulate = Color(0.5, 0.5, 0.5)
 	
 func get_tilemap_position(pos):
 	return $tilemap.map_to_local($tilemap.local_to_map(pos))
