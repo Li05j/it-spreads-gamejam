@@ -18,6 +18,8 @@ var object_map: Dictionary = {} # This stores the instance of the child, either 
 @onready var yl = 0
 @onready var yr = 64 * tilemap.tile_set.tile_size.y
 
+var enemy_count = 0
+
 func _ready():
 	timer.wait_time = C.GAME_TIMER_INTERVAL
 	set_process_input(true)
@@ -108,6 +110,7 @@ func spawn_initial_enemy():
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
 	enemy_instance.enemy_init(world_pos, object_map, placement_map)
 	add_child(enemy_instance)
+	enemy_count += 1
 	
 func _on_build_turret_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildTurretButton"))
@@ -151,4 +154,10 @@ func check_loss(enemy):
 	yr < enemy.global_position.y:
 		# TODO: process loss
 		print("YOU LOSE")
+		get_tree().paused = true
+		
+func check_win():
+	if enemy_count == 0:
+		# TODO: process win
+		print("YOU WIN")
 		get_tree().paused = true
