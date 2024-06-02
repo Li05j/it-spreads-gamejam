@@ -19,7 +19,7 @@ var map: Dictionary = {}
 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
-@onready var placement_map = PlacementMap.new(MAP_WIDTH, MAP_HEIGHT)
+@onready var placement_map = PlacementMap.new(MAP_WIDTH, MAP_HEIGHT, tilemap)
 
 func _ready():
 	set_process_input(true)
@@ -66,7 +66,7 @@ func spawn_turret(click_position):
 		
 func spawn_beacon(pos):
 	var coords = get_tilemap_coord(pos)
-	if !check_afforadble("beacon"):
+	if !check_affordable("beacon"):
 		return # player cannot afford beacon
 	
 	if check_occupied(pos):
