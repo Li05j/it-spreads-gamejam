@@ -13,6 +13,10 @@ var object_map: Dictionary = {} # This stores the instance of the child, either 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
 @onready var placement_map = PlacementMap.new(C.MAP_WIDTH, C.MAP_HEIGHT, tilemap)
+@onready var xl = 0
+@onready var xr = 64 * tilemap.tile_set.tile_size.x
+@onready var yl = 0
+@onready var yr = 64 * tilemap.tile_set.tile_size.y
 
 func _ready():
 	timer.wait_time = C.GAME_TIMER_INTERVAL
@@ -135,3 +139,7 @@ func check_occupied(pos):
 func _on_timer_timeout():
 	gold += C.GOLD_PER_INTERVAL
 	control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
+
+func _draw():
+	var rect = Rect2(xl, yl, xr, yr)
+	draw_rect(rect, Color.BLUE, false)

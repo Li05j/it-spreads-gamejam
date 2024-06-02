@@ -15,7 +15,7 @@ var ticks = 0
 var shoot_target = null
 
 func _ready():
-	timer.wait_time = C.GAME_TIMER_INTERVAL
+	timer.wait_time = C.TURRET_TICK_INTERVAL
 	timer.start()
 
 func turret_init(world_pos, object_map_ref, placement_map_ref):

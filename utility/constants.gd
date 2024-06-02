@@ -20,6 +20,7 @@ const TICKS_TILL_SPREAD = 5
 const MAX_TICK = 20
 
 # Turret shoot constants
+const TURRET_TICK_INTERVAL = 0.5
 const TURRET_SHOOT_RANGE = 3
-const TURRET_DAMAGE = 2
+const TURRET_DAMAGE = 1
 const TICKS_TILL_SHOOT = 1

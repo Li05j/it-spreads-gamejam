@@ -12,7 +12,7 @@ var object_map = null
 var placement_map = null
 
 # Ticks until spread
-var ticks = 0
+var ticks = 1
 
 func _ready():
 	timer.wait_time = C.GAME_TIMER_INTERVAL
