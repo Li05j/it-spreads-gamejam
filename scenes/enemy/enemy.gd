@@ -68,3 +68,8 @@ func check_occupied(pos):
 	if object_map != null:
 		return pos in object_map and object_map[pos] != null
 	print("Error: map is not passed properly - it is null somehow.")
+	
+func take_damage(damage):
+	ticks -= 5
+	if ticks <= 0:
+		queue_free()

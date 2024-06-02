@@ -52,7 +52,7 @@ func spawn_turret(click_position):
 		#map[click_position] = true
 		object_map[click_position] = turret_instance
 		placement_map.update_range(click_coords, C.TURRET_PLACEMENT_RADIUS) # update placement radius
-		turret_instance.position = click_position
+		turret_instance.turret_init(click_position, object_map, placement_map)
 		# TODO: gold setter + signal
 		gold -= C.TURRET_PRICE
 		control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
@@ -76,7 +76,7 @@ func spawn_beacon(click_position):
 
 	#map[click_position] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
 	object_map[click_position] = beacon_instance
-	beacon_instance.position = click_position
+	beacon_instance.beacon_init(click_position, object_map, placement_map)
 	placement_map.update_range(coords, C.BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
 	gold -= C.BEACON_PRICE
