@@ -49,8 +49,8 @@ func shoot():
 	var target: Enemy = targets[0] # shoot closest
 	print("Shooting at ", target.global_position)
 	shoot_target = Vector2i(target.global_position) # in case target is destroyed
-	target.take_damage(C.TURRET_DAMAGE)
-	get_parent().gold += 50
+	var dmg_num = target.take_damage(C.TURRET_DAMAGE)
+	get_parent().gold += dmg_num * C.GOLD_PER_INTERVAL
 	queue_redraw()
 	
 func _draw():

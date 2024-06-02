@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7vhyo0malpeg"]
+[gd_scene load_steps=6 format=3 uid="uid://c7vhyo0malpeg"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_ljk6n"]
 [ext_resource type="ButtonGroup" uid="uid://cgrokv7q16c1n" path="res://button-groups/buildButtons.tres" id="2_ojkpf"]
@@ -6,6 +6,9 @@
 
 [sub_resource type="TileSet" id="TileSet_2ygf7"]
 tile_size = Vector2i(64, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jvww"]
+size = Vector2(64, 64)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -63,6 +66,11 @@ button_group = ExtResource("2_ojkpf")
 text = "Build Turret"
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="containBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="containBox"]
+shape = SubResource("RectangleShape2D_0jvww")
 
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]

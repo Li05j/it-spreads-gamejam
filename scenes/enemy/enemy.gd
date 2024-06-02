@@ -70,6 +70,9 @@ func check_occupied(pos):
 	print("Error: map is not passed properly - it is null somehow.")
 	
 func take_damage(damage):
-	ticks -= 5
+	var dmg_number = min(ticks, damage)
+	ticks -= damage
 	if ticks <= 0:
+		object_map.erase(global_position)
 		queue_free()
+	return dmg_number
