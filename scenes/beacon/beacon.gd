@@ -2,8 +2,16 @@ extends Node2D
 
 class_name Beacon
 
+const C = preload("res://utility/constants.gd")
+
+@onready var timer = $Timer
+
 var object_map = null
 var placement_map = null
+
+#func _ready():
+	#timer.wait_time = C.GOLD_GENERATE_INTERVAL
+	#timer.start()
 
 func beacon_init(world_pos, object_map_ref, placement_map_ref):
 	global_position = world_pos
@@ -11,11 +19,5 @@ func beacon_init(world_pos, object_map_ref, placement_map_ref):
 	placement_map = placement_map_ref
 	object_map[world_pos] = self
 
-# # Called when the node enters the scene tree for the first time.
-# func _ready():
-# 	pass # Replace with function body.
-
-
-# # Called every frame. 'delta' is the elapsed time since the previous frame.
-# func _process(delta):
-# 	pass
+#func _on_timer_timeout():
+	#get_parent().gold += C.GOLD_PER_INTERVAL

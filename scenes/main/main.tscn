@@ -50,26 +50,44 @@ offset_bottom = 109.0
 layout_mode = 2
 text = "Gold:"
 
+[node name="goldGenDisplay" type="Label" parent="canvas/controlPanel/VBox"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="canvas/controlPanel/VBox"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
 [node name="buildBeaconButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
-text = "Build Beacon"
+text = "Build Beacon
+Cost: $25"
 
 [node name="buildTurretButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
-text = "Build Turret"
+text = "Build Turret
+Cost: $25"
+
+[node name="upgradeEconomy" type="Button" parent="canvas/controlPanel/VBox"]
+layout_mode = 2
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
+[node name="winlosepopup" type="AcceptDialog" parent="."]
 size = Vector2i(300, 200)
-ok_button_text = "Exit Game"
+
+[node name="Label" type="Label" parent="winlosepopup"]
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
+[connection signal="pressed" from="canvas/controlPanel/VBox/upgradeEconomy" to="." method="_on_upgrade_economy_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="canceled" from="AcceptDialog" to="." method="_on_accept_dialog_canceled"]
-[connection signal="confirmed" from="AcceptDialog" to="." method="_on_accept_dialog_confirmed"]
+[connection signal="close_requested" from="winlosepopup" to="." method="_on_winlosepopup_close_requested"]
+[connection signal="confirmed" from="winlosepopup" to="." method="_on_winlosepopup_confirmed"]
