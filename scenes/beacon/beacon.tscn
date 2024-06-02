@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ljkquhllfv82"]
+[gd_scene load_steps=6 format=3 uid="uid://ljkquhllfv82"]
 
 [ext_resource type="Script" path="res://scenes/beacon/beacon.gd" id="1_r38wa"]
+[ext_resource type="Texture2D" uid="uid://4n1woaobkuml" path="res://sprites/B12.png" id="2_7utqu"]
 
 [sub_resource type="Gradient" id="Gradient_tgcct"]
 offsets = PackedFloat32Array(0)
@@ -16,9 +17,15 @@ size = Vector2(64, 64)
 script = ExtResource("1_r38wa")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 texture = SubResource("GradientTexture2D_ijms5")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("RectangleShape2D_obpky")
+
+[node name="B12" type="Sprite2D" parent="."]
+position = Vector2(-2.38419e-07, 0)
+scale = Vector2(0.374269, 0.374269)
+texture = ExtResource("2_7utqu")

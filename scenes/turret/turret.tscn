@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bhmgbwux6xwxe"]
 
-[ext_resource type="Texture2D" uid="uid://4bjpgvgukgei" path="res://sprites/icon.svg" id="1_6pfpe"]
 [ext_resource type="Script" path="res://scenes/turret/turret.gd" id="1_d2fvu"]
+[ext_resource type="Texture2D" uid="uid://ckf62g823h00t" path="res://sprites/Turret10.png" id="2_ay7ch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oytm7"]
 size = Vector2(64, 64)
@@ -15,10 +15,10 @@ script = ExtResource("1_d2fvu")
 shape = SubResource("RectangleShape2D_oytm7")
 debug_color = Color(1.54018e-06, 0.593277, 0.737148, 0.42)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_6pfpe")
-
 [node name="Timer" type="Timer" parent="."]
+
+[node name="Turret10" type="Sprite2D" parent="."]
+scale = Vector2(0.927536, 0.927536)
+texture = ExtResource("2_ay7ch")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
