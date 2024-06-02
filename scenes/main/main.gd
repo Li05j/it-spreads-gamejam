@@ -14,9 +14,9 @@ var object_map: Dictionary = {} # This stores the instance of the child, either 
 @onready var tilemap = $tilemap
 @onready var placement_map = PlacementMap.new(C.MAP_WIDTH, C.MAP_HEIGHT, tilemap)
 @onready var xl = 0
-@onready var xr = 64 * tilemap.tile_set.tile_size.x
+@onready var xr = C.MAP_WIDTH * tilemap.tile_set.tile_size.x
 @onready var yl = 0
-@onready var yr = 64 * tilemap.tile_set.tile_size.y
+@onready var yr = C.MAP_HEIGHT * tilemap.tile_set.tile_size.y
 
 var enemy_count = 0
 
@@ -100,7 +100,7 @@ func check_affordable(item):
 	return false
 	
 func spawn_initial_enemy():
-	var initial_position = Vector2(5, 5) # Temporary enemy location
+	var initial_position = Vector2(8, 8) # Temporary enemy location
 	if tilemap == null:
 		print("TileMap is null")
 	else:

@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://chvnecubhx51o"]
+[gd_scene load_steps=3 format=3 uid="uid://bqmah4nf43nfo"]
 
 [ext_resource type="Script" path="res://scenes/enemy/enemy.gd" id="1_odoat"]
 [ext_resource type="Texture2D" uid="uid://bgtp5h5pfqkry" path="res://sprites/black-square.svg" id="2_mo4d0"]
 
-[node name="enemy" type="Node2D"]
+[node name="Enemy" type="Node2D"]
 script = ExtResource("1_odoat")
 
 [node name="Timer" type="Timer" parent="."]
