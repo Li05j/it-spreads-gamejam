@@ -54,6 +54,7 @@ func spread():
 		var new_enemy = preload("res://scenes/enemy/enemy.tscn").instantiate()
 		new_enemy.enemy_init(world_pos, object_map, placement_map)
 		get_parent().add_child(new_enemy)
+		get_parent().check_loss(new_enemy)
 		
 func enemy_init(world_pos, object_map_ref, placement_map_ref):
 	global_position = world_pos

@@ -143,3 +143,12 @@ func _on_timer_timeout():
 func _draw():
 	var rect = Rect2(xl, yl, xr, yr)
 	draw_rect(rect, Color.BLUE, false)
+	
+func check_loss(enemy):
+	if xl > enemy.global_position.x or \
+	xr < enemy.global_position.x or \
+	yl > enemy.global_position.y or \
+	yr < enemy.global_position.y:
+		# TODO: process loss
+		print("YOU LOSE")
+		get_tree().paused = true
