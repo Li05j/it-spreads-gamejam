@@ -15,7 +15,7 @@ const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
 
-var map: Dictionary = {}
+var map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
@@ -54,7 +54,8 @@ func spawn_turret(click_position):
 	var turret_instance = TurretScene.instantiate() # Create an instance of the turret
 	if turret_instance:
 		add_child(turret_instance)  # Add it to the Main scene tree
-		map[click_position] = true
+		#map[click_position] = true
+		map[click_position] = turret_instance
 		placement_map.update_range(click_coords, TURRET_PLACEMENT_RADIUS) # update placement radius
 		turret_instance.position = click_position
 		# TODO: gold setter + signal
@@ -64,12 +65,12 @@ func spawn_turret(click_position):
 	else:
 		print("Failed to create turret instance.")
 		
-func spawn_beacon(pos):
-	var coords = get_tilemap_coord(pos)
+func spawn_beacon(click_position):
+	var coords = get_tilemap_coord(click_position)
 	if !check_affordable("beacon"):
 		return # player cannot afford beacon
 	
-	if check_occupied(pos):
+	if check_occupied(click_position):
 		return # player cannot place turret on occupied tile
 
 	if not placement_map.check_placement_range(coords):
@@ -78,13 +79,14 @@ func spawn_beacon(pos):
 	var beacon_instance = BeaconScene.instantiate()
 	add_child(beacon_instance)
 
-	map[pos] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
-	beacon_instance.position = pos
+	#map[click_position] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
+	map[click_position] = beacon_instance
+	beacon_instance.position = click_position
 	placement_map.update_range(coords, BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
 	gold -= BEACON_PRICE
 	$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # update gold display
-	print("Spawned beacon at position: ", pos)
+	print("Spawned beacon at position: ", click_position)
 	
 func check_affordable(item):
 	match item:
@@ -97,15 +99,18 @@ func check_affordable(item):
 	return false
 	
 func spawn_initial_enemy():
+	var initial_position = Vector2(5, 5) # Temporary enemy location
 	if tilemap == null:
 		print("TileMap is null")
 	else:
 		print("TileMap found")
-	var center_tile = Vector2(5, 5) # Temporary enemy location
-	var world_pos = tilemap.map_to_local(center_tile)
+		
+	var world_pos = tilemap.map_to_local(initial_position)
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
 	enemy_instance.global_position = world_pos
+	enemy_instance.set_map_reference(map)
 	add_child(enemy_instance)
+	map[world_pos] = enemy_instance
 	
 func _on_build_turret_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildTurretButton"))

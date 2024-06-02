@@ -1,5 +1,7 @@
 extends Node2D
 
+class_name Turret
+
 const TURRET_RANGE = 3
 
 @onready var targets = [] # targets sorted by distance
