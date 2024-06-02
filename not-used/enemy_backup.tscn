@@ -1,19 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://chvnecubhx51o"]
+[gd_scene load_steps=3 format=3 uid="uid://t6vnsmbnvddp"]
 
-[ext_resource type="Script" path="res://scenes/enemy/enemy.gd" id="1_odoat"]
+[ext_resource type="Script" path="res://scenes/enemy/enemy.gd" id="1_sjixb"]
 [ext_resource type="Texture2D" uid="uid://bgtp5h5pfqkry" path="res://sprites/black-square.svg" id="2_mo4d0"]
 
 [node name="enemy" type="Node2D"]
-script = ExtResource("1_odoat")
+script = ExtResource("1_sjixb")
 
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_mo4d0")
-
-[node name="Label" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

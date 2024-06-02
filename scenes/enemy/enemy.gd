@@ -4,16 +4,19 @@ const TICKS_TILL_SPREAD = 5
 const TICK_FRAME = 1.0 # 1 second interval by default
 
 @onready var timer = $Timer
+@onready var label = $Label
 
 # Ticks until spread
 var ticks = 0
 
 func _ready():
 	timer.wait_time = TICK_FRAME
+	label.text = str(ticks)
 	timer.start()
 
 func _on_timer_timeout():
 	ticks += 1
+	label.text = str(ticks)
 	print("ticks... ", ticks)
 	if ticks >= TICKS_TILL_SPREAD:
 		spread()

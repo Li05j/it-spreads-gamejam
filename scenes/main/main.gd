@@ -101,7 +101,7 @@ func spawn_initial_enemy():
 		print("TileMap is null")
 	else:
 		print("TileMap found")
-	var center_tile = Vector2(5, 5)
+	var center_tile = Vector2(5, 5) # Temporary enemy location
 	var world_pos = tilemap.map_to_local(center_tile)
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
 	enemy_instance.global_position = world_pos
