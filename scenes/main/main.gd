@@ -6,6 +6,8 @@ const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 
 var active_button = null
 var gold = C.INITIAL_GOLD # Initial gold value
+var gold_gen = C.INITIAL_GOLD_GEN
+var economy_upgrade_price = C.INITIAL_ECONOMY_UPGRADE_PRICE
 
 var object_map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
@@ -23,9 +25,11 @@ var object_map: Dictionary = {} # This stores the instance of the child, either 
 var enemy_count = 0
 
 func _ready():
-	timer.wait_time = C.GAME_TIMER_INTERVAL
+	timer.wait_time = C.GOLD_UPDATE_INTERVAL
 	set_process_input(true)
-	control_panel_vbox.get_node("goldDisplay").text = str(gold)
+	update_gold_label(gold)
+	update_gold_gen_label(C.INITIAL_GOLD_GEN)
+	update_economy_upgrade_button_text(C.INITIAL_ECONOMY_UPGRADE_PRICE)
 	spawn_initial_enemy()
 	timer.start()
 	
@@ -63,7 +67,7 @@ func spawn_turret(click_position):
 		turret_instance.turret_init(click_position, object_map, placement_map)
 		# TODO: gold setter + signal
 		gold -= C.TURRET_PRICE
-		control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
+		update_gold_label(gold) # Update gold display
 		print("Spawned turret at position: ", click_position)
 	else:
 		print("Failed to create turret instance.")
@@ -88,7 +92,7 @@ func spawn_beacon(click_position):
 	placement_map.update_range(coords, C.BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
 	gold -= C.BEACON_PRICE
-	$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # update gold display
+	update_gold_label(gold) # update gold display
 	print("Spawned beacon at position: ", click_position)
 	
 func check_affordable(item):
@@ -114,11 +118,29 @@ func spawn_initial_enemy():
 	add_child(enemy_instance)
 	enemy_count += 1
 	
+func update_economy_upgrade_button_text(price):
+	control_panel_vbox.get_node("upgradeEconomy").text = "Upgrade Economy: $" + str(price)
+
+func update_gold_label(gold):
+	control_panel_vbox.get_node("goldDisplay").text = "Gold: $" + str(gold)
+	
+func update_gold_gen_label(rate):
+	control_panel_vbox.get_node("goldGenDisplay").text = "Gold Gen /s: $" + str(rate)
+	
 func _on_build_turret_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildTurretButton"))
 
 func _on_build_beacon_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildBeaconButton"))
+	
+func _on_upgrade_economy_pressed():
+	if gold >= economy_upgrade_price:
+		gold -= economy_upgrade_price
+		economy_upgrade_price = ceil(economy_upgrade_price * C.UPGRADE_PRICE_INCREASE_RATE)
+		gold_gen += C.GOLD_GEN_INCREASE
+		update_gold_label(gold)
+		update_gold_gen_label(gold_gen)
+		update_economy_upgrade_button_text(economy_upgrade_price)
 		
 func set_active_button(button):
 	if active_button == button:
@@ -142,8 +164,8 @@ func check_occupied(pos):
 	return pos in object_map and object_map[pos] != null
 
 func _on_timer_timeout():
-	gold += C.GOLD_PER_INTERVAL
-	control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
+	gold += gold_gen
+	update_gold_label(gold) # Update gold display
 
 func _draw():
 	var rect = Rect2(xl, yl, xr, yr)
