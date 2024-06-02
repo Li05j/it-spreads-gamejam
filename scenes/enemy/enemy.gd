@@ -24,15 +24,16 @@ func spread():
 	var pos = tilemap.local_to_map(global_position)
 
 	for adj_pos in tilemap.get_surrounding_cells(pos):
-		if check_occupied(tilemap, adj_pos):  # Check if tile is empty, not working yet though
-			continue
+		# NOTE: We might not need check occupied because enemy instantly kills turrets anyways.
+		#if check_occupied(tilemap, adj_pos):  # Check if tile is empty, not working yet though
+			#continue
 		var new_enemy = preload("res://scenes/enemy/enemy.tscn").instantiate()
 		new_enemy.global_position = tilemap.map_to_local(adj_pos)
 		get_parent().add_child(new_enemy)
 
-func check_occupied(tilemap, pos):
-	var source_id = tilemap.get_cell_source_id(0, pos)
-	var atlas_coords = tilemap.get_cell_atlas_coords(0, pos)
-	var alternative_id = tilemap.get_cell_alternative_tile(0, pos)
-
-	return source_id != -1 or atlas_coords != Vector2i(-1, -1) or alternative_id != -1
+#func check_occupied(tilemap, pos):
+	#var source_id = tilemap.get_cell_source_id(0, pos)
+	#var atlas_coords = tilemap.get_cell_atlas_coords(0, pos)
+	#var alternative_id = tilemap.get_cell_alternative_tile(0, pos)
+#
+	#return source_id != -1 or atlas_coords != Vector2i(-1, -1) or alternative_id != -1
