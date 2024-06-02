@@ -3,6 +3,10 @@ extends Control
 const INITIAL_GOLD = 500
 const TURRET_PRICE = 50
 const BEACON_PRICE = 10
+const MAP_WIDTH = 64
+const MAP_HEIGHT = 64
+const TURRET_PLACEMENT_RADIUS = 1 # turret placement radius increase
+const BEACON_PLACEMENT_RADIUS = 2 # beacon placement radius increase
 
 # Preload the turret scene
 var TurretScene = preload("res://scenes/turret/turret.tscn")
@@ -15,6 +19,7 @@ var map: Dictionary = {}
 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
+@onready var placement_map = PlacementMap.new(MAP_WIDTH, MAP_HEIGHT)
 
 func _ready():
 	set_process_input(true)
@@ -36,16 +41,21 @@ func _input(event):
 			spawn_beacon(tilemap_position)
 
 func spawn_turret(click_position):
+	var click_coords = get_tilemap_coord(click_position)
 	if !check_affordable("turret"):
 		return # Player cannot afford turret
 	
 	if check_occupied(click_position):
 		return # player cannot place turret on occupied tile
+
+	if not placement_map.check_placement_range(click_coords):
+		return # player cannot place turret out of placement range
 	
 	var turret_instance = TurretScene.instantiate() # Create an instance of the turret
 	if turret_instance:
 		add_child(turret_instance)  # Add it to the Main scene tree
 		map[click_position] = true
+		placement_map.update_range(click_coords, TURRET_PLACEMENT_RADIUS) # update placement radius
 		turret_instance.position = click_position
 		# TODO: gold setter + signal
 		gold -= TURRET_PRICE
@@ -55,16 +65,22 @@ func spawn_turret(click_position):
 		print("Failed to create turret instance.")
 		
 func spawn_beacon(pos):
+	var coords = get_tilemap_coord(pos)
 	if !check_afforadble("beacon"):
 		return # player cannot afford beacon
 	
 	if check_occupied(pos):
 		return # player cannot place turret on occupied tile
 
+	if not placement_map.check_placement_range(coords):
+		return # player cannot place outside of placement range
+
 	var beacon_instance = BeaconScene.instantiate()
 	add_child(beacon_instance)
+
 	map[pos] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
 	beacon_instance.position = pos
+	placement_map.update_range(coords, BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
 	gold -= BEACON_PRICE
 	$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # update gold display
@@ -111,6 +127,9 @@ func set_active_button(button):
 	
 func get_tilemap_position(pos):
 	return $tilemap.map_to_local($tilemap.local_to_map(pos))
+
+func get_tilemap_coord(pos):
+	return $tilemap.local_to_map(pos)
 	
 func check_occupied(pos):
 	return pos in map and map[pos] != null
