@@ -9,6 +9,7 @@ var gold = C.INITIAL_GOLD # Initial gold value
 
 var object_map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
+@onready var win_lose_dialog = $AcceptDialog
 @onready var timer = $Timer
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
@@ -154,10 +155,19 @@ func check_loss(enemy):
 	yr < enemy.global_position.y:
 		# TODO: process loss
 		print("YOU LOSE")
+		show_dialog("YOU LOSE")
 		get_tree().paused = true
 		
 func check_win():
 	if enemy_count == 0:
 		# TODO: process win
 		print("YOU WIN")
+		show_dialog("YOU WIN")
 		get_tree().paused = true
+
+func show_dialog(message):
+	win_lose_dialog.dialog_text = message
+	win_lose_dialog.popup_centered()
+
+func _on_accept_dialog_canceled():
+	get_tree().quit()

@@ -64,6 +64,12 @@ text = "Build Turret"
 
 [node name="Timer" type="Timer" parent="."]
 
+[node name="AcceptDialog" type="AcceptDialog" parent="."]
+size = Vector2i(300, 200)
+ok_button_text = "Exit Game"
+
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="canceled" from="AcceptDialog" to="." method="_on_accept_dialog_canceled"]
+[connection signal="confirmed" from="AcceptDialog" to="." method="_on_accept_dialog_confirmed"]
