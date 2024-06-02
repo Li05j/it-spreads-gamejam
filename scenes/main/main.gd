@@ -38,14 +38,27 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
-		# NOTE: use get_global_mouse_position instead of event.global_position
-		var global_mouse_pos = get_global_mouse_position()
-		print("Mouse button pressed at position: ", global_mouse_pos)
-		var tilemap_position = get_tilemap_position(global_mouse_pos)
-		if active_button == control_panel_vbox.get_node("buildTurretButton"):
-			spawn_turret(tilemap_position)
-		elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
-			spawn_beacon(tilemap_position)
+		if event.button_index == 1:
+			var global_mouse_pos = get_global_mouse_position()
+			print("Mouse button pressed at position: ", global_mouse_pos)
+			var tilemap_position = get_tilemap_position(global_mouse_pos)
+			if active_button == control_panel_vbox.get_node("buildTurretButton"):
+				spawn_turret(tilemap_position)
+			elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
+				spawn_beacon(tilemap_position)
+				
+		if event.button_index == 2:
+			reset_active_button()
+			
+	#if event is InputEventMouseButton and event.pressed:
+		## NOTE: use get_global_mouse_position instead of event.global_position
+		#var global_mouse_pos = get_global_mouse_position()
+		#print("Mouse button pressed at position: ", global_mouse_pos)
+		#var tilemap_position = get_tilemap_position(global_mouse_pos)
+		#if active_button == control_panel_vbox.get_node("buildTurretButton"):
+			#spawn_turret(tilemap_position)
+		#elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
+			#spawn_beacon(tilemap_position)
 
 func spawn_turret(click_position):
 	var click_coords = get_tilemap_coord(click_position)
@@ -153,6 +166,12 @@ func set_active_button(button):
 			active_button.modulate = Color(1, 1, 1)
 		active_button = button
 		active_button.modulate = Color(0.5, 0.5, 0.5)
+		
+func reset_active_button():
+	if active_button != null:
+		active_button.modulate = Color(1, 1, 1)
+		active_button = null
+		print("Building Nothing.")
 	
 func get_tilemap_position(pos):
 	return $tilemap.map_to_local($tilemap.local_to_map(pos))
