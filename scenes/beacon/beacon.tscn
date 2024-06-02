@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://ljkquhllfv82"]
+
+[ext_resource type="Script" path="res://scenes/beacon/beacon.gd" id="1_r38wa"]
+
+[sub_resource type="Gradient" id="Gradient_tgcct"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.5, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ijms5"]
+gradient = SubResource("Gradient_tgcct")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_obpky"]
+size = Vector2(64, 64)
+
+[node name="Beacon" type="Node2D"]
+script = ExtResource("1_r38wa")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_ijms5")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_obpky")

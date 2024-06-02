@@ -6,6 +6,7 @@ const BEACON_PRICE = 10
 
 # Preload the turret scene
 var TurretScene = preload("res://scenes/turret/turret.tscn")
+const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 
 var active_button = null
 var gold = INITIAL_GOLD # Initial gold value
@@ -46,14 +47,28 @@ func spawn_turret(click_position):
 		add_child(turret_instance)  # Add it to the Main scene tree
 		map[click_position] = true
 		turret_instance.position = click_position
+		# TODO: gold setter + signal
 		gold -= TURRET_PRICE
 		control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
 		print("Spawned turret at position: ", click_position)
 	else:
 		print("Failed to create turret instance.")
 		
-func spawn_beacon(click_position):
-	print("TODO: beacon not yet impelemented.")
+func spawn_beacon(pos):
+	if !check_afforadble("beacon"):
+		return # player cannot afford beacon
+	
+	if check_occupied(pos):
+		return # player cannot place turret on occupied tile
+
+	var beacon_instance = BeaconScene.instantiate()
+	add_child(beacon_instance)
+	map[pos] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
+	beacon_instance.position = pos
+	# TODO: gold setter + signal
+	gold -= BEACON_PRICE
+	$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # update gold display
+	print("Spawned beacon at position: ", pos)
 	
 func check_affordable(item):
 	match item:
