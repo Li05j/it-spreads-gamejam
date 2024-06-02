@@ -7,8 +7,9 @@ const C = preload("res://utility/constants.gd")
 @onready var timer = $Timer
 @onready var label = $Label
 
-# Get map dictionary from main scene
-var map = null
+# Get object_map dictionary from main scene
+var object_map = null
+var placement_map = null
 
 # Ticks until spread
 var ticks = 0
@@ -32,40 +33,36 @@ func _on_timer_timeout():
 
 func spread():
 	var tilemap = get_parent().get_node("tilemap")
-	var pos = tilemap.local_to_map(global_position)
+	var map_pos = tilemap.local_to_map(global_position)
 
-	for adj_pos in tilemap.get_surrounding_cells(pos):
-		var local_pos = tilemap.map_to_local(adj_pos)
+	for adj_pos in tilemap.get_surrounding_cells(map_pos):
+		var world_pos = tilemap.map_to_local(adj_pos)
 		
-		if check_occupied(local_pos) == true:
-			var obj = map[local_pos]
+		if check_occupied(world_pos) == true:
+			var obj = object_map[world_pos]
 			if obj != null:
 				if obj is Enemy:
 					continue
-				if obj is Turret or obj is Beacon:
+				if obj is Turret or obj is Beacon:	
 					print("Destroying ", obj)
 					obj.queue_free()
-					map.erase(adj_pos)
+					object_map.erase(adj_pos)
 					print("Destroyed at position: ", adj_pos)
 		
 		var new_enemy = preload("res://scenes/enemy/enemy.tscn").instantiate()
-		new_enemy.global_position = local_pos
-		new_enemy.set_map_reference(map)
+		new_enemy.enemy_init(world_pos, object_map, placement_map)
 		get_parent().add_child(new_enemy)
-		map[local_pos] = new_enemy
 		
-func set_map_reference(ref):
-	map = ref
+func enemy_init(world_pos, object_map_ref, placement_map_ref):
+	global_position = world_pos
+	object_map = object_map_ref
+	placement_map = placement_map_ref
+	object_map[world_pos] = self
 	
+func set_map_reference(ref):
+	object_map = ref
 	
 func check_occupied(pos):
-	if map != null:
-		return pos in map and map[pos] != null
+	if object_map != null:
+		return pos in object_map and object_map[pos] != null
 	print("Error: map is not passed properly - it is null somehow.")
-	
-#func check_occupied(tilemap, pos):
-	#var tile_data = tilemap.get_cell_tile_data(-1, Vector2(pos.x, pos.y))
-	#print("Looking at this tile: ", Vector2(pos.x, pos.y))
-	#print("What is in the tile? ", tile_data)
-	#return tile_data != null  # Check if the tile data exists
-

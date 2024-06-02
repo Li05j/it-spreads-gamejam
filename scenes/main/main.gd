@@ -7,7 +7,7 @@ const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 var active_button = null
 var gold = C.INITIAL_GOLD # Initial gold value
 
-var map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
+var object_map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
@@ -47,7 +47,7 @@ func spawn_turret(click_position):
 	if turret_instance:
 		add_child(turret_instance)  # Add it to the Main scene tree
 		#map[click_position] = true
-		map[click_position] = turret_instance
+		object_map[click_position] = turret_instance
 		placement_map.update_range(click_coords, C.TURRET_PLACEMENT_RADIUS) # update placement radius
 		turret_instance.position = click_position
 		# TODO: gold setter + signal
@@ -72,7 +72,7 @@ func spawn_beacon(click_position):
 	add_child(beacon_instance)
 
 	#map[click_position] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
-	map[click_position] = beacon_instance
+	object_map[click_position] = beacon_instance
 	beacon_instance.position = click_position
 	placement_map.update_range(coords, C.BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
@@ -99,10 +99,8 @@ func spawn_initial_enemy():
 		
 	var world_pos = tilemap.map_to_local(initial_position)
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
-	enemy_instance.global_position = world_pos
-	enemy_instance.set_map_reference(map)
+	enemy_instance.enemy_init(world_pos, object_map, placement_map)
 	add_child(enemy_instance)
-	map[world_pos] = enemy_instance
 	
 func _on_build_turret_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildTurretButton"))
@@ -129,7 +127,7 @@ func get_tilemap_coord(pos):
 	return $tilemap.local_to_map(pos)
 	
 func check_occupied(pos):
-	return pos in map and map[pos] != null
+	return pos in object_map and object_map[pos] != null
 #
 ## Called when the node enters the scene tree for the first time.
 #func _ready():
