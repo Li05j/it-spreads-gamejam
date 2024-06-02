@@ -62,9 +62,8 @@ toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Turret"
 
-[node name="TurretContainer" type="Node2D" parent="."]
-
-[node name="EnemyContainer" type="Node2D" parent="."]
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -15,7 +15,7 @@ var placement_map = null
 var ticks = 0
 
 func _ready():
-	timer.wait_time = C.TICK_FRAME
+	timer.wait_time = C.GAME_TIMER_INTERVAL
 	label.text = str(ticks)
 	$Sprite2D.self_modulate.a = 0.05
 	timer.start()

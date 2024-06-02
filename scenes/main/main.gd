@@ -9,14 +9,17 @@ var gold = C.INITIAL_GOLD # Initial gold value
 
 var object_map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
+@onready var timer = $Timer
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
 @onready var placement_map = PlacementMap.new(C.MAP_WIDTH, C.MAP_HEIGHT, tilemap)
 
 func _ready():
+	timer.wait_time = C.GAME_TIMER_INTERVAL
 	set_process_input(true)
 	control_panel_vbox.get_node("goldDisplay").text = str(gold)
 	spawn_initial_enemy()
+	timer.start()
 	
 #func _process(delta):
 	#pass
@@ -128,12 +131,7 @@ func get_tilemap_coord(pos):
 	
 func check_occupied(pos):
 	return pos in object_map and object_map[pos] != null
-#
-## Called when the node enters the scene tree for the first time.
-#func _ready():
-	#pass # Replace with function body.
-#
-#
-## Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-	#pass
+
+func _on_timer_timeout():
+	gold += C.GOLD_PER_INTERVAL
+	control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
