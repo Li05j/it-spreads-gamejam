@@ -1,25 +1,17 @@
 extends Control
 
-const INITIAL_GOLD = 500
-const TURRET_PRICE = 50
-const BEACON_PRICE = 10
-const MAP_WIDTH = 64
-const MAP_HEIGHT = 64
-const TURRET_PLACEMENT_RADIUS = 1 # turret placement radius increase
-const BEACON_PLACEMENT_RADIUS = 2 # beacon placement radius increase
-
-# Preload the turret scene
-var TurretScene = preload("res://scenes/turret/turret.tscn")
+const C = preload("res://utility/constants.gd")
+const TurretScene = preload("res://scenes/turret/turret.tscn")
 const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 
 var active_button = null
-var gold = INITIAL_GOLD # Initial gold value
+var gold = C.INITIAL_GOLD # Initial gold value
 
 var map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
-@onready var placement_map = PlacementMap.new(MAP_WIDTH, MAP_HEIGHT, tilemap)
+@onready var placement_map = PlacementMap.new(C.MAP_WIDTH, C.MAP_HEIGHT, tilemap)
 
 func _ready():
 	set_process_input(true)
@@ -56,10 +48,10 @@ func spawn_turret(click_position):
 		add_child(turret_instance)  # Add it to the Main scene tree
 		#map[click_position] = true
 		map[click_position] = turret_instance
-		placement_map.update_range(click_coords, TURRET_PLACEMENT_RADIUS) # update placement radius
+		placement_map.update_range(click_coords, C.TURRET_PLACEMENT_RADIUS) # update placement radius
 		turret_instance.position = click_position
 		# TODO: gold setter + signal
-		gold -= TURRET_PRICE
+		gold -= C.TURRET_PRICE
 		control_panel_vbox.get_node("goldDisplay").text = str(gold) # Update gold display
 		print("Spawned turret at position: ", click_position)
 	else:
@@ -82,19 +74,19 @@ func spawn_beacon(click_position):
 	#map[click_position] = { "type": "beacon", "value": "100" } # TODO: change depending on how map is stored
 	map[click_position] = beacon_instance
 	beacon_instance.position = click_position
-	placement_map.update_range(coords, BEACON_PLACEMENT_RADIUS) # update placement radius
+	placement_map.update_range(coords, C.BEACON_PLACEMENT_RADIUS) # update placement radius
 	# TODO: gold setter + signal
-	gold -= BEACON_PRICE
+	gold -= C.BEACON_PRICE
 	$canvas/controlPanel/VBox/goldDisplay.text = str(gold) # update gold display
 	print("Spawned beacon at position: ", click_position)
 	
 func check_affordable(item):
 	match item:
 		"turret":
-			if gold >= TURRET_PRICE:
+			if gold >= C.TURRET_PRICE:
 				return true;
 		"beacon":
-			if gold >= BEACON_PRICE:
+			if gold >= C.BEACON_PRICE:
 				return true;
 	return false
 	

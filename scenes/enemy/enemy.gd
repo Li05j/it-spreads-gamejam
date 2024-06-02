@@ -2,9 +2,7 @@ extends Node2D
 
 class_name Enemy
 
-const TICKS_TILL_SPREAD = 5
-const TICK_FRAME = 1.0 # 1 second interval by default
-const MAX_TICK = 20
+const C = preload("res://utility/constants.gd")
 
 @onready var timer = $Timer
 @onready var label = $Label
@@ -16,17 +14,17 @@ var map = null
 var ticks = 0
 
 func _ready():
-	timer.wait_time = TICK_FRAME
+	timer.wait_time = C.TICK_FRAME
 	label.text = str(ticks)
 	$Sprite2D.self_modulate.a = 0.05
 	timer.start()
 
 func _on_timer_timeout():
 	ticks += 1
-	if ticks >= TICKS_TILL_SPREAD:
+	if ticks >= C.TICKS_TILL_SPREAD:
 		spread()
-		if ticks >= MAX_TICK:
-			ticks = MAX_TICK
+		if ticks >= C.MAX_TICK:
+			ticks = C.MAX_TICK
 			
 	label.text = str(ticks)
 	var opacity = min(1.0, ticks * 0.1)
