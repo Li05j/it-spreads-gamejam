@@ -24,5 +24,4 @@ func _input(event):
 			drag_start_pos = mouse_pos
 
 func _process(delta):
-	global_position = target_pos # TODO: fix scuffed camera movements
-
+	global_position = global_position.lerp(target_pos, 0.1)  # Smooth camera movement

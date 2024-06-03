@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 const C = preload("res://utility/constants.gd")
 const TurretScene = preload("res://scenes/turret/turret.tscn")
@@ -30,7 +30,9 @@ func _ready():
 	update_gold_label(gold)
 	update_gold_gen_label(C.INITIAL_GOLD_GEN)
 	update_economy_upgrade_button_text(C.INITIAL_ECONOMY_UPGRADE_PRICE)
-	spawn_initial_enemy()
+	spawn_initial_enemy(Vector2(6,13))
+	spawn_initial_enemy(Vector2(16,9))
+	spawn_initial_enemy(Vector2(25,25))
 	timer.start()
 	
 #func _process(delta):
@@ -50,15 +52,9 @@ func _input(event):
 		if event.button_index == 2:
 			reset_active_button()
 			
-	#if event is InputEventMouseButton and event.pressed:
-		## NOTE: use get_global_mouse_position instead of event.global_position
-		#var global_mouse_pos = get_global_mouse_position()
-		#print("Mouse button pressed at position: ", global_mouse_pos)
-		#var tilemap_position = get_tilemap_position(global_mouse_pos)
-		#if active_button == control_panel_vbox.get_node("buildTurretButton"):
-			#spawn_turret(tilemap_position)
-		#elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
-			#spawn_beacon(tilemap_position)
+func _draw():
+	var rect = Rect2(xl, yl, xr, yr)
+	draw_rect(rect, Color.SLATE_GRAY, true)
 
 func spawn_turret(click_position):
 	var click_coords = get_tilemap_coord(click_position)
@@ -118,8 +114,8 @@ func check_affordable(item):
 				return true;
 	return false
 	
-func spawn_initial_enemy():
-	var initial_position = Vector2(8, 8) # Temporary enemy location
+func spawn_initial_enemy(loc):
+	var initial_position = loc # Temporary enemy location
 	if tilemap == null:
 		print("TileMap is null")
 	else:
@@ -185,10 +181,6 @@ func check_occupied(pos):
 func _on_timer_timeout():
 	gold += gold_gen
 	update_gold_label(gold) # Update gold display
-
-func _draw():
-	var rect = Rect2(xl, yl, xr, yr)
-	draw_rect(rect, Color.BLUE, false)
 	
 func check_loss(enemy):
 	if xl > enemy.global_position.x or \

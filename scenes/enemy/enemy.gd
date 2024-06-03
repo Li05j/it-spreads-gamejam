@@ -15,7 +15,7 @@ var placement_map = null
 var ticks = 1
 
 func _ready():
-	timer.wait_time = C.TICKS_UPDATE_INTERVAL
+	timer.wait_time = C.TICKS_BASE_UPDATE_INTERVAL
 	label.text = str(ticks)
 	$Sprite2D.self_modulate.a = 0.05
 	timer.start()
@@ -28,8 +28,13 @@ func _on_timer_timeout():
 			ticks = C.MAX_TICK
 			
 	label.text = str(ticks)
-	var opacity = min(1.0, ticks * 0.1)
+	var opacity = min(1.0, ticks * (1.0 / C.MAX_TICK))
 	$Sprite2D.self_modulate.a = opacity
+	
+	var new_wait_time = C.TICKS_BASE_UPDATE_INTERVAL - get_parent().enemy_count * C.TICKS_INTERVAL_REDUCE_RATE
+	new_wait_time = max(new_wait_time, C.MIN_TICK_INTERVAL)
+	timer.wait_time = new_wait_time
+	
 
 func spread():
 	var tilemap = get_parent().get_node("tilemap")
