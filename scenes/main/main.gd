@@ -39,9 +39,10 @@ func _ready():
 	update_economy_upgrade_button_text(C.INITIAL_ECONOMY_UPGRADE_PRICE)
 	update_time_elapsed_label()
 	
-	spawn_initial_enemy(Vector2(7,5))
-	spawn_initial_enemy(Vector2(6,13))
-	spawn_initial_enemy(Vector2(16,9))
+	spawn_initial_enemy(Vector2(20,8))
+	spawn_initial_enemy(Vector2(8,10))
+	spawn_initial_enemy(Vector2(5,15))
+	
 	timer.start()
 	
 #func _process(delta):
@@ -231,7 +232,8 @@ func _on_timer_timeout():
 	
 	if new_enemy_flag == 0 && time_elapsed >= C.NEW_WAVE_INTERVAL:
 		new_enemy_flag += 1
-		spawn_initial_enemy(Vector2(25,25))
+		spawn_initial_enemy(Vector2(30,10))
+		spawn_initial_enemy(Vector2(27,35))
 		show_new_enemy_dialog()
 	
 func check_loss(enemy):

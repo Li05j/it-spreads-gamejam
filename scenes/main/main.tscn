@@ -66,17 +66,18 @@ layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Beacon
-Cost: $30"
+Cost: $40"
 
 [node name="buildTurretButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Turret
-Cost: $100"
+Cost: $50"
 
 [node name="buildLaserButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
+toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Laser Turret
 Cost: $150"
