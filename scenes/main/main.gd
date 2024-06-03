@@ -116,10 +116,10 @@ func check_affordable(item):
 	
 func spawn_initial_enemy(loc):
 	var initial_position = loc # Temporary enemy location
-	if tilemap == null:
-		print("TileMap is null")
-	else:
-		print("TileMap found")
+	#if tilemap == null:
+		#print("TileMap is null")
+	#else:
+		#print("TileMap found")
 		
 	var world_pos = tilemap.map_to_local(initial_position)
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
