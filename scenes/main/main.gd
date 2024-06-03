@@ -2,27 +2,34 @@ extends Node2D
 
 const C = preload("res://utility/constants.gd")
 const TurretScene = preload("res://scenes/turret/turret.tscn")
+const LaserScene = preload("res://scenes/turret/laser.tscn")
 const BeaconScene = preload("res://scenes/beacon/beacon.tscn")
 
 var active_button = null
+
 var gold = C.INITIAL_GOLD # Initial gold value
 var gold_gen = C.INITIAL_GOLD_GEN
 var economy_upgrade_price = C.INITIAL_ECONOMY_UPGRADE_PRICE
 
+var time_elapsed = 0 # seconds
+
 var object_map: Dictionary = {} # This stores the instance of the child, either a beacon, turret or enemy.
 
 @onready var win_lose_dialog = $winlosepopup
+@onready var new_enemy_dialog = $newEnemySpawned
 
 @onready var timer = $Timer
 @onready var control_panel_vbox = $canvas/controlPanel/VBox
 @onready var tilemap = $tilemap
 @onready var placement_map = PlacementMap.new(C.MAP_WIDTH, C.MAP_HEIGHT, tilemap)
+
 @onready var xl = 0
 @onready var xr = C.MAP_WIDTH * tilemap.tile_set.tile_size.x
 @onready var yl = 0
 @onready var yr = C.MAP_HEIGHT * tilemap.tile_set.tile_size.y
 
 var enemy_count = 0
+var new_enemy_flag = 0
 
 func _ready():
 	timer.wait_time = C.GOLD_UPDATE_INTERVAL
@@ -30,9 +37,11 @@ func _ready():
 	update_gold_label(gold)
 	update_gold_gen_label(C.INITIAL_GOLD_GEN)
 	update_economy_upgrade_button_text(C.INITIAL_ECONOMY_UPGRADE_PRICE)
+	update_time_elapsed_label()
+	
+	spawn_initial_enemy(Vector2(7,5))
 	spawn_initial_enemy(Vector2(6,13))
 	spawn_initial_enemy(Vector2(16,9))
-	spawn_initial_enemy(Vector2(25,25))
 	timer.start()
 	
 #func _process(delta):
@@ -46,6 +55,8 @@ func _input(event):
 			var tilemap_position = get_tilemap_position(global_mouse_pos)
 			if active_button == control_panel_vbox.get_node("buildTurretButton"):
 				spawn_turret(tilemap_position)
+			elif active_button == control_panel_vbox.get_node("buildLaserButton"):
+				spawn_laser(tilemap_position)
 			elif active_button == control_panel_vbox.get_node("buildBeaconButton"):
 				spawn_beacon(tilemap_position)
 				
@@ -81,6 +92,31 @@ func spawn_turret(click_position):
 	else:
 		print("Failed to create turret instance.")
 		
+func spawn_laser(click_position):
+	var click_coords = get_tilemap_coord(click_position)
+	if !check_affordable("laser"):
+		return # Player cannot afford turret
+	
+	if check_occupied(click_position):
+		return # player cannot place turret on occupied tile
+
+	if not placement_map.check_placement_range(click_coords):
+		return # player cannot place turret out of placement range
+	
+	var laser_instance = LaserScene.instantiate() # Create an instance of the turret
+	if laser_instance:
+		add_child(laser_instance)  # Add it to the Main scene tree
+		#map[click_position] = true
+		object_map[click_position] = laser_instance
+		placement_map.update_range(click_coords, C.LASER_PLACEMENT_RADIUS) # update placement radius
+		laser_instance.turret_init(click_position, object_map, placement_map)
+		# TODO: gold setter + signal
+		gold -= C.LASER_PRICE
+		update_gold_label(gold) # Update gold display
+		print("Spawned laser turret at position: ", click_position)
+	else:
+		print("Failed to create turret instance.")
+		
 func spawn_beacon(click_position):
 	var coords = get_tilemap_coord(click_position)
 	if !check_affordable("beacon"):
@@ -112,6 +148,9 @@ func check_affordable(item):
 		"beacon":
 			if gold >= C.BEACON_PRICE:
 				return true;
+		"laser":
+			if gold >= C.LASER_PRICE:
+				return true;
 	return false
 	
 func spawn_initial_enemy(loc):
@@ -136,11 +175,17 @@ func update_gold_label(gold):
 func update_gold_gen_label(rate):
 	control_panel_vbox.get_node("goldGenDisplay").text = "Gold Gen /s: $" + str(rate)
 	
+func update_time_elapsed_label():
+	control_panel_vbox.get_node("timeElapsed").text = "Time: " + str(time_elapsed)
+			
 func _on_build_turret_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildTurretButton"))
 
 func _on_build_beacon_button_pressed():
 	set_active_button(control_panel_vbox.get_node("buildBeaconButton"))
+	
+func _on_build_laser_button_pressed():
+	set_active_button(control_panel_vbox.get_node("buildLaserButton"))
 	
 func _on_upgrade_economy_pressed():
 	if gold >= economy_upgrade_price:
@@ -181,6 +226,13 @@ func check_occupied(pos):
 func _on_timer_timeout():
 	gold += gold_gen
 	update_gold_label(gold) # Update gold display
+	time_elapsed += 1
+	update_time_elapsed_label()
+	
+	if new_enemy_flag == 0 && time_elapsed >= C.NEW_WAVE_INTERVAL:
+		new_enemy_flag += 1
+		spawn_initial_enemy(Vector2(25,25))
+		show_new_enemy_dialog()
 	
 func check_loss(enemy):
 	if xl > enemy.global_position.x or \
@@ -189,22 +241,34 @@ func check_loss(enemy):
 	yr < enemy.global_position.y:
 		# TODO: process loss
 		print("YOU LOSE")
-		show_dialog("YOU LOSE")
+		show_win_lose_dialog("YOU LOSE")
 		get_tree().paused = true
 		
 func check_win():
 	if enemy_count == 0:
 		# TODO: process win
 		print("YOU WIN")
-		show_dialog("YOU WIN")
+		show_win_lose_dialog("YOU WIN")
 		get_tree().paused = true
 
-func show_dialog(message):
+func show_win_lose_dialog(message):
 	win_lose_dialog.get_node("Label").text = message
 	win_lose_dialog.popup_centered()
+	
+func show_new_enemy_dialog():
+	new_enemy_dialog.popup_centered()
 
 func _on_winlosepopup_close_requested():
 	get_tree().quit()
 	
-#func _on_winlosepopup_confirmed():
-	#get_tree().quit()
+func _on_winlosepopup_confirmed():
+	win_lose_dialog.hide()
+	get_tree().paused = false
+	get_tree().quit()
+
+func _on_new_enemy_spawned_about_to_popup():
+	get_tree().paused = true
+
+func _on_new_enemy_spawned_canceled():
+	get_tree().paused = false
+	

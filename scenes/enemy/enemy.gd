@@ -4,7 +4,8 @@ class_name Enemy
 
 const C = preload("res://utility/constants.gd")
 
-@onready var timer = $Timer
+@onready var tick_timer = $tickTimer
+@onready var status_timer = $statusTimer
 @onready var label = $Label
 
 # Get object_map dictionary from main scene
@@ -15,12 +16,17 @@ var placement_map = null
 var ticks = 1
 
 func _ready():
-	timer.wait_time = C.TICKS_BASE_UPDATE_INTERVAL
-	label.text = str(ticks)
-	$Sprite2D.self_modulate.a = 0.05
-	timer.start()
+	status_timer.wait_time = C.GLOBAL_GAME_INTERVAL
+	status_timer.start()
+	tick_timer.wait_time = C.TICKS_BASE_UPDATE_INTERVAL
+	tick_timer.start()
 
-func _on_timer_timeout():
+	$Sprite2D.self_modulate.a = 0.05
+	
+func _on_status_timer_timeout():
+	label.text = str(ticks)
+
+func _on_tick_timer_timeout():
 	ticks += 1
 	if ticks >= C.TICKS_TILL_SPREAD:
 		spread()
@@ -33,8 +39,7 @@ func _on_timer_timeout():
 	
 	var new_wait_time = C.TICKS_BASE_UPDATE_INTERVAL - get_parent().enemy_count * C.TICKS_INTERVAL_REDUCE_RATE
 	new_wait_time = max(new_wait_time, C.MIN_TICK_INTERVAL)
-	timer.wait_time = new_wait_time
-	
+	tick_timer.wait_time = new_wait_time
 
 func spread():
 	var tilemap = get_parent().get_node("tilemap")
@@ -49,6 +54,8 @@ func spread():
 				continue # We do not create another enemy on top of an existing one.
 			if obj is Turret:
 				placement_map.update_range(adj_pos, C.TURRET_PLACEMENT_RADIUS, true)
+			elif obj is Laser:
+				placement_map.update_range(adj_pos, C.LASER_PLACEMENT_RADIUS, true)
 			elif obj is Beacon:
 				placement_map.update_range(adj_pos, C.BEACON_PLACEMENT_RADIUS, true)
 					

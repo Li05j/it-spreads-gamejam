@@ -20,6 +20,21 @@ layer_0/modulate = Color(1, 0.192157, 1, 1)
 position = Vector2(577, 324)
 script = ExtResource("3_ms6e4")
 
+[node name="newEnemySpawned" type="AcceptDialog" parent="."]
+ok_button_text = "FUCK!"
+dialog_text = "A NEW ENEMY SPAWNED!
+Move around the camera to see where it is."
+
+[node name="winlosepopup" type="AcceptDialog" parent="."]
+title = "GAME OVER"
+size = Vector2i(300, 200)
+
+[node name="Label" type="Label" parent="winlosepopup"]
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="canvas" type="CanvasLayer" parent="."]
 
 [node name="controlPanel" type="Panel" parent="canvas"]
@@ -60,22 +75,31 @@ button_group = ExtResource("2_ojkpf")
 text = "Build Turret
 Cost: $100"
 
+[node name="buildLaserButton" type="Button" parent="canvas/controlPanel/VBox"]
+layout_mode = 2
+button_group = ExtResource("2_ojkpf")
+text = "Build Laser Turret
+Cost: $150"
+
 [node name="upgradeEconomy" type="Button" parent="canvas/controlPanel/VBox"]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="canvas/controlPanel/VBox"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="timeElapsed" type="Label" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="winlosepopup" type="AcceptDialog" parent="."]
-size = Vector2i(300, 200)
-
-[node name="Label" type="Label" parent="winlosepopup"]
-offset_right = 40.0
-offset_bottom = 23.0
-horizontal_alignment = 1
-vertical_alignment = 1
-
+[connection signal="about_to_popup" from="newEnemySpawned" to="." method="_on_new_enemy_spawned_about_to_popup"]
+[connection signal="canceled" from="newEnemySpawned" to="." method="_on_new_enemy_spawned_canceled"]
+[connection signal="confirmed" from="newEnemySpawned" to="." method="_on_new_enemy_spawned_confirmed"]
+[connection signal="close_requested" from="winlosepopup" to="." method="_on_winlosepopup_close_requested"]
+[connection signal="confirmed" from="winlosepopup" to="." method="_on_winlosepopup_confirmed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildBeaconButton" to="." method="_on_build_beacon_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/buildTurretButton" to="." method="_on_build_turret_button_pressed"]
+[connection signal="pressed" from="canvas/controlPanel/VBox/buildLaserButton" to="." method="_on_build_laser_button_pressed"]
 [connection signal="pressed" from="canvas/controlPanel/VBox/upgradeEconomy" to="." method="_on_upgrade_economy_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
-[connection signal="close_requested" from="winlosepopup" to="." method="_on_winlosepopup_close_requested"]

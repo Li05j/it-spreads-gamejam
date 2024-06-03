@@ -16,7 +16,7 @@ shape = SubResource("RectangleShape2D_oytm7")
 debug_color = Color(1.54018e-06, 0.593277, 0.737148, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.978, 0.978)
+scale = Vector2(0.88, 0.88)
 texture = ExtResource("2_sycw2")
 
 [node name="Timer" type="Timer" parent="."]

@@ -1,6 +1,6 @@
 extends Node2D
 
-class_name Turret
+class_name Laser
 
 const C = preload("res://utility/constants.gd")
 
@@ -15,7 +15,7 @@ var ticks = 0
 var shoot_target = null
 
 func _ready():
-	timer.wait_time = C.TURRET_TICK_INTERVAL
+	timer.wait_time = C.LASER_TICK_INTERVAL
 	timer.start()
 
 func turret_init(world_pos, object_map_ref, placement_map_ref):
@@ -32,10 +32,10 @@ func update_targets():
 		if is_instance_valid(targets[i]):
 			new_targets.append(targets[i])
 	targets = new_targets
-	for dx in range(-C.TURRET_SHOOT_RANGE, C.TURRET_SHOOT_RANGE + 1):
-		for dy in range(-C.TURRET_SHOOT_RANGE, C.TURRET_SHOOT_RANGE + 1):
+	for dx in range(-C.LASER_SHOOT_RANGE, C.LASER_SHOOT_RANGE + 1):
+		for dy in range(-C.LASER_SHOOT_RANGE, C.LASER_SHOOT_RANGE + 1):
 			var dist = abs(dx) + abs(dy)
-			if dist > C.TURRET_SHOOT_RANGE: continue
+			if dist > C.LASER_SHOOT_RANGE: continue
 			var new_xy = coords + Vector2i(dx, dy)
 			var new_pos = tilemap.map_to_local(new_xy)
 			if new_pos in object_map and \
@@ -49,7 +49,7 @@ func shoot():
 	var target: Enemy = targets[0] # shoot closest
 	#print("Shooting at ", target.global_position)
 	shoot_target = Vector2i(target.global_position) # in case target is destroyed
-	target.take_damage(C.TURRET_DAMAGE)
+	target.take_damage(C.LASER_DAMAGE)
 	queue_redraw()
 	
 func _draw():
@@ -82,6 +82,6 @@ func _on_timer_timeout():
 	ticks += 1
 	
 	update_targets()
-	if ticks >= C.TURRET_TICKS_TILL_SHOOT:
+	if ticks >= C.LASER_TICKS_TILL_SHOOT:
 		shoot()
 		ticks = 0
