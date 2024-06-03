@@ -232,8 +232,8 @@ func _on_timer_timeout():
 	
 	if new_enemy_flag == 0 && time_elapsed >= C.NEW_WAVE_INTERVAL:
 		new_enemy_flag += 1
-		spawn_initial_enemy(Vector2(30,10))
-		spawn_initial_enemy(Vector2(27,35))
+		spawn_initial_enemy(Vector2(25,10))
+		spawn_initial_enemy(Vector2(27,24))
 		show_new_enemy_dialog()
 	
 func check_loss(enemy):

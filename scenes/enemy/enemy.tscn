@@ -13,7 +13,6 @@ scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_mo4d0")
 
 [node name="Label" type="Label" parent="."]
-visible = false
 offset_right = 40.0
 offset_bottom = 23.0
 

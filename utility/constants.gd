@@ -3,8 +3,8 @@ extends Node
 const GLOBAL_GAME_INTERVAL = 0.1
 
 # Tilemap size, basically game field size.
-const MAP_WIDTH = 50
-const MAP_HEIGHT = 50
+const MAP_WIDTH = 32
+const MAP_HEIGHT = 32
 
 # Camera:
 const ZOOM_STEP = 0.1
@@ -14,8 +14,8 @@ const MAX_ZOOM = 2.0
 # Enemy
 const TICKS_TILL_SPREAD = 10
 const TICKS_BASE_UPDATE_INTERVAL = 3.0
-const TICKS_INTERVAL_REDUCE_RATE = 0.00025
-const MIN_TICK_INTERVAL = 2.0
+const TICKS_INTERVAL_REDUCE_RATE = 0
+const MIN_TICK_INTERVAL = 3.0
 const MAX_TICK = 50
 
 const NEW_WAVE_INTERVAL = 360
