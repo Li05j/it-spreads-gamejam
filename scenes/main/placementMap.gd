@@ -21,7 +21,6 @@ func _init(width, height, tilemap):
 	# TODO: starting placement
 	self.map[0][0] = 1
 	add_placement_tile(Vector2i(0,0))
-	add_placement_tile(Vector2i(31,31))
 
 func in_range_2d(x: int, y: int):
 	return 0 <= x and x < self.width and 0 <= y and y < self.height

@@ -63,13 +63,17 @@ layout_mode = 2
 
 [node name="buildBeaconButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
+tooltip_text = "Build this to expand your territory!"
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Beacon
-Cost: $40"
+Cost: $30"
 
 [node name="buildTurretButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
+tooltip_text = "Range: 3
+Damage: 2
+Reload: 1.75s"
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Turret
@@ -77,10 +81,13 @@ Cost: $50"
 
 [node name="buildLaserButton" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2
+tooltip_text = "Range: 5
+Damage: 1
+Reload: 0.3s"
 toggle_mode = true
 button_group = ExtResource("2_ojkpf")
 text = "Build Laser Turret
-Cost: $150"
+Cost: $175"
 
 [node name="upgradeEconomy" type="Button" parent="canvas/controlPanel/VBox"]
 layout_mode = 2

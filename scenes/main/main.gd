@@ -39,8 +39,8 @@ func _ready():
 	update_economy_upgrade_button_text(C.INITIAL_ECONOMY_UPGRADE_PRICE)
 	update_time_elapsed_label()
 	
-	spawn_initial_enemy(Vector2(20,8))
-	spawn_initial_enemy(Vector2(8,10))
+	spawn_initial_enemy(Vector2(11,2))
+	spawn_initial_enemy(Vector2(8,9))
 	spawn_initial_enemy(Vector2(5,15))
 	
 	timer.start()
@@ -155,13 +155,26 @@ func check_affordable(item):
 	return false
 	
 func spawn_initial_enemy(loc):
-	var initial_position = loc # Temporary enemy location
 	#if tilemap == null:
 		#print("TileMap is null")
 	#else:
 		#print("TileMap found")
 		
-	var world_pos = tilemap.map_to_local(initial_position)
+	var world_pos = tilemap.map_to_local(loc)
+	
+	if check_occupied(world_pos) == true:
+			var obj = object_map[world_pos]
+			if obj is Turret:
+				placement_map.update_range(loc, C.TURRET_PLACEMENT_RADIUS, true)
+			elif obj is Laser:
+				placement_map.update_range(loc, C.LASER_PLACEMENT_RADIUS, true)
+			elif obj is Beacon:
+				placement_map.update_range(loc, C.BEACON_PLACEMENT_RADIUS, true)
+					
+			obj.queue_free()
+			object_map.erase(loc)
+			print("Turret/Beacon destroyed at position: ", loc)
+			
 	var enemy_instance = preload("res://scenes/enemy/enemy.tscn").instantiate()
 	enemy_instance.enemy_init(world_pos, object_map, placement_map)
 	add_child(enemy_instance)
@@ -191,7 +204,8 @@ func _on_build_laser_button_pressed():
 func _on_upgrade_economy_pressed():
 	if gold >= economy_upgrade_price:
 		gold -= economy_upgrade_price
-		economy_upgrade_price = ceil(economy_upgrade_price * C.UPGRADE_PRICE_INCREASE_RATE)
+		#economy_upgrade_price = ceil(economy_upgrade_price * C.UPGRADE_PRICE_INCREASE_RATE)
+		economy_upgrade_price = ceil(economy_upgrade_price * C.UPGRADE_PRICE_INCREASE_RATE) + C.UPGRADE_PRICE_INCREASE_VAL
 		gold_gen += C.GOLD_GEN_INCREASE
 		update_gold_label(gold)
 		update_gold_gen_label(gold_gen)
@@ -232,8 +246,10 @@ func _on_timer_timeout():
 	
 	if new_enemy_flag == 0 && time_elapsed >= C.NEW_WAVE_INTERVAL:
 		new_enemy_flag += 1
-		spawn_initial_enemy(Vector2(25,10))
-		spawn_initial_enemy(Vector2(27,24))
+		
+		spawn_initial_enemy(Vector2(7,30))
+		spawn_initial_enemy(Vector2(29,6))
+		spawn_initial_enemy(Vector2(32,22))
 		show_new_enemy_dialog()
 	
 func check_loss(enemy):
