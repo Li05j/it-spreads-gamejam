@@ -5,9 +5,6 @@ It Spreads is a game created during the University of Waterloo Game Development 
 # Engine
 This game was developed using the Godot Engine.
 
-# Download
-You can download the pre-release version of the game to try it out:
-
 # Download It Spreads
 - Pre-release v1.0.0-alpha.1: https://github.com/Li05j/it-spreads-gamejam/releases/tag/v1.0.0-alpha.1
 - Itch.io: https://ragemango.itch.io/it-spreads
